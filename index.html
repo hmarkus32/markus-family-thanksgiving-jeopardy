@@ -74,13 +74,13 @@
   .team-ctl{display:flex;flex-direction:column;gap:.4vh;justify-content:center}
 
   /* Clue */
-  #clue-screen{padding:2vh 3vw 1.5vh;gap:clamp(8px, 1.5vh, 16px);background:radial-gradient(1000px 600px at 50% 35%, #8a3a18 0%, #4a1a14 60%, #2a100c 100%)}
+  #clue-screen{padding:1.1vh 2vw 0.7vh;gap:clamp(4px, 0.9vh, 10px);background:radial-gradient(1000px 600px at 50% 35%, #8a3a18 0%, #4a1a14 60%, #2a100c 100%)}
   #clue-screen .meta{display:flex;justify-content:space-between;align-items:center;flex:0 0 auto}
-  #clue-cat{font-family:var(--display);font-weight:600;color:#2a1300;background:linear-gradient(180deg,#ffa94d,#ff7a1a);padding:.2em .8em;border-radius:999px;font-size:clamp(16px,2.2vw,38px)}
-  #clue-val{font-family:var(--display);font-weight:700;color:var(--gold);font-size:clamp(26px,4vw,72px)}
-  .clue-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2.5vh;padding:0 2vw}
-  #clue-text{white-space:pre-line;font-family:var(--sans);font-weight:800;line-height:1.25;max-width:min(90vw,1500px);color:#fff;
-    font-size:clamp(22px, min(2.4vw, 3.5vh), 30px);margin:0;overflow-wrap:break-word;text-shadow:0 .04em .12em rgba(0,0,0,.35)}
+  #clue-cat{font-family:var(--display);font-weight:600;color:#2a1300;background:linear-gradient(180deg,#ffa94d,#ff7a1a);padding:.15em .7em;border-radius:999px;font-size:clamp(14px,1.8vw,28px)}
+  #clue-val{font-family:var(--display);font-weight:700;color:var(--gold);font-size:clamp(22px,3.2vw,48px)}
+  .clue-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.9vh;padding:0 .5vw}
+  #clue-text{white-space:pre-line;font-family:var(--sans);font-weight:800;line-height:1.18;max-width:min(96vw,1600px);width:100%;color:#fff;
+    font-size:clamp(28px, min(3.1vw, 4.5vh), 40px);margin:0;overflow-wrap:break-word;text-shadow:0 .04em .12em rgba(0,0,0,.35)}
   #clue-img{display:none;max-height:32vh;max-width:70vw;border:5px solid var(--orange);border-radius:2vmin;background:#fff;margin:0 auto;box-shadow:0 1vmin 3vmin rgba(0,0,0,.4);flex:0 0 auto}
   #clue-img.on{display:block}
   #clue-text{order:1}
@@ -89,31 +89,31 @@
   #clue-img.after-answer{order:4}
   #clue-clip{order:5}
   @media (min-width:800px){ #clue-img.on.after-answer{max-height:42vh} }
-  #answer{font-family:var(--display);font-weight:700;color:var(--gold);font-size:clamp(22px, min(2.4vw, 3.5vh), 30px);min-height:1.3em;visibility:hidden;overflow-wrap:break-word;line-height:1.25}
+  #answer{font-family:var(--display);font-weight:700;color:var(--gold);font-size:clamp(28px, min(3.1vw, 4.5vh), 40px);min-height:1.2em;visibility:hidden;overflow-wrap:break-word;line-height:1.18}
   #answer.shown{visibility:visible;white-space:pre-line}
   #answer.empty{color:var(--muted);font-style:italic}
-  #clue-text.trail{display:inline-block;text-align:left;margin:0 auto;font-family:ui-monospace,"Cascadia Mono","SFMono-Regular",Menlo,Consolas,monospace;font-weight:800;letter-spacing:.05em;line-height:1.25}
+  #clue-text.trail{display:inline-block;text-align:left;margin:0 auto;font-family:ui-monospace,"Cascadia Mono","SFMono-Regular",Menlo,Consolas,monospace;font-weight:800;letter-spacing:.04em;line-height:1.18;width:auto}
   .clip-wrap{display:none;width:min(92vw,520px,calc(28vh * 16 / 9));aspect-ratio:16/9;max-height:28vh;margin:.35em auto 0;border-radius:1.2vmin;overflow:hidden;background:#000;border:3px solid var(--orange);box-shadow:0 .6vmin 2vmin rgba(0,0,0,.35);flex:0 0 auto}
   .clip-wrap.on{display:block}
   .clip-wrap iframe{width:100%;height:100%;border:0;display:block}
   .clue-actions{display:flex;flex-wrap:wrap;align-items:center;gap:2vw;justify-content:center;flex:0 0 auto}
-  .clue-actions .btn-big{font-size:clamp(18px,2.2vw,36px)}
+  .clue-actions .btn-big{font-size:clamp(15px,1.7vw,24px);padding:.28em 1em}
   .clue-actions .btn-big.secondary{background:rgba(255,255,255,.1);color:var(--cream);box-shadow:none;border:2px solid rgba(255,255,255,.3)}
   @media (max-width:699px){
     .clue-actions{display:grid;grid-template-columns:1fr 1fr;justify-items:stretch;gap:8px 2vw}
     .clue-actions .timer-pill{grid-column:1 / -1;justify-self:center}
   }
-  .timer-pill{position:relative;display:inline-flex;align-items:stretch;isolation:isolate;height:38px;border-radius:999px;overflow:hidden;
+  .timer-pill{position:relative;display:inline-flex;align-items:stretch;isolation:isolate;height:32px;border-radius:999px;overflow:hidden;
     border:2px solid rgba(255,196,77,.6);background:rgba(0,0,0,.32);box-shadow:0 2px 8px rgba(0,0,0,.28);flex:0 0 auto;user-select:none;-webkit-user-select:none}
   .timer-pill .timer-fill{position:absolute;inset:0 auto 0 0;width:var(--p,100%);background:linear-gradient(180deg,#ffc44d,#e86a12);z-index:0;display:none;pointer-events:none}
   .timer-pill.running .timer-fill,.timer-pill.timesup .timer-fill{display:block}
-  .timer-pill .timer-half{position:relative;z-index:1;flex:1 1 0;min-width:58px;border:0;background:transparent;color:var(--cream);
-    font-family:var(--display);font-weight:600;font-size:15px;padding:0 14px;line-height:1}
+  .timer-pill .timer-half{position:relative;z-index:1;flex:1 1 0;min-width:48px;border:0;background:transparent;color:var(--cream);
+    font-family:var(--display);font-weight:600;font-size:13px;padding:0 10px;line-height:1}
   .timer-pill .timer-half + .timer-half{box-shadow:inset 1px 0 0 rgba(255,255,255,.3)}
   .timer-pill .timer-half:hover,.timer-pill .timer-half:focus-visible{background:rgba(255,154,60,.25);outline:none}
-  .timer-pill .timer-display{display:none;position:relative;z-index:1;min-width:128px;padding:0 22px;border:0;background:transparent;color:#fff;
-    font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:.04em;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,.4)}
-  .timer-pill.running,.timer-pill.timesup{height:48px}
+  .timer-pill .timer-display{display:none;position:relative;z-index:1;min-width:104px;padding:0 14px;border:0;background:transparent;color:#fff;
+    font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:.04em;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+  .timer-pill.running,.timer-pill.timesup{height:36px}
   .timer-pill.running .timer-half,.timer-pill.timesup .timer-half{display:none}
   .timer-pill.running .timer-display,.timer-pill.timesup .timer-display{display:block}
   .timer-pill.timesup{border-color:#ff6b6b}
@@ -125,11 +125,16 @@
     100%{box-shadow:inset 0 0 0 0 rgba(255,80,80,0)}
   }
   #final-timer{margin:2px auto 8px}
-  #clue-screen .scoreboard{padding-top:.5vh}
+  #clue-screen .scoreboard{padding-top:0;gap:.5vw}
+  #clue-screen .team{padding:.2vh .45vw;gap:.1vh;border-width:1px;border-radius:1vmin}
+  #clue-screen .team input{font-size:clamp(12px,1.2vw,18px);padding:0}
+  #clue-screen .team .score,#clue-screen .team input.score-input{font-size:clamp(16px,1.8vw,28px)}
+  #clue-screen .team .pm button{font-size:clamp(11px,1.2vw,16px);padding:.06em 0}
   .deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .deco span{position:absolute;font-size:clamp(22px,3.2vw,52px);opacity:.22;animation:floaty 7s ease-in-out infinite}
   @keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-12px) rotate(6deg)}}
-  .kbd{text-align:center;font-size:clamp(11px,1vw,16px);color:var(--muted)}
+  .kbd{text-align:center;font-size:clamp(10px,.9vw,13px);color:var(--muted);line-height:1.2}
+  @media (max-height:850px){ #clue-screen .kbd{display:none} }
 
   [hidden]{display:none!important}
   /* ---- Final round ---- */
@@ -139,7 +144,7 @@
   #final-link{font-family:Nunito,sans-serif;font-size:.85rem;color:rgba(255,255,255,.55);text-decoration:underline;cursor:pointer;background:none;border:0}
   #final-screen,#podium-screen{text-align:center;padding:24px}
   .final-tag{display:inline-block;background:linear-gradient(#ffb347,#ff8a1f);color:#2a1300;font-family:Fredoka,sans-serif;font-weight:600;padding:6px 18px;border-radius:999px;font-size:1.1rem}
-  #final-q{font-family:Fredoka,sans-serif;font-weight:600;font-size:clamp(22px, min(2.4vw, 3.5vh), 30px);line-height:1.25;max-width:1000px;margin:12px auto;color:#fff}
+  #final-q{font-family:Fredoka,sans-serif;font-weight:600;font-size:clamp(28px, min(3.1vw, 4.5vh), 40px);line-height:1.18;max-width:min(96vw,1200px);margin:8px auto;color:#fff}
   #final-teams{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:20px auto}
   .fteam{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 18px;min-width:220px;min-height:150px;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:center}
   .fteam .nm{font-family:Fredoka,sans-serif;font-size:1.3rem;font-weight:600;color:#fff}
@@ -418,7 +423,7 @@ const GAME = {
 <script>
 (function(){
   "use strict";
-  var KEY = "jeopardy-markus-thanksgiving-v7";
+  var KEY = "jeopardy-markus-thanksgiving-v8";
   var DEFAULT_NAMES = ["Team 1","Team 2","Team 3","Team 4","Team 5","Team 6"];
   var MAXT = GAME.maxTeams || 6;
 
