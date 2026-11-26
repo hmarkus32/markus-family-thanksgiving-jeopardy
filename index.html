@@ -74,15 +74,13 @@
   .team-ctl{display:flex;flex-direction:column;gap:.4vh;justify-content:center}
 
   /* Clue */
-  #clue-screen{padding:2vh 3vw 1.5vh;gap:2vh;background:radial-gradient(1000px 600px at 50% 35%, #8a3a18 0%, #4a1a14 60%, #2a100c 100%)}
+  #clue-screen{padding:2vh 3vw 1.5vh;gap:clamp(8px, 1.5vh, 16px);background:radial-gradient(1000px 600px at 50% 35%, #8a3a18 0%, #4a1a14 60%, #2a100c 100%)}
   #clue-screen .meta{display:flex;justify-content:space-between;align-items:center;flex:0 0 auto}
   #clue-cat{font-family:var(--display);font-weight:600;color:#2a1300;background:linear-gradient(180deg,#ffa94d,#ff7a1a);padding:.2em .8em;border-radius:999px;font-size:clamp(16px,2.2vw,38px)}
   #clue-val{font-family:var(--display);font-weight:700;color:var(--gold);font-size:clamp(26px,4vw,72px)}
   .clue-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2.5vh;padding:0 2vw}
   #clue-text{white-space:pre-line;font-family:var(--sans);font-weight:800;line-height:1.25;max-width:min(90vw,1500px);color:#fff;
-    font-size:clamp(28px,4.8vw,92px);margin:0;overflow-wrap:break-word;text-shadow:0 .04em .12em rgba(0,0,0,.35)}
-  #clue-text.long{font-size:clamp(24px,3.9vw,74px)}
-  #clue-text.lines{font-size:clamp(20px,3.1vw,56px);line-height:1.2}
+    font-size:clamp(22px, min(2.4vw, 3.5vh), 30px);margin:0;overflow-wrap:break-word;text-shadow:0 .04em .12em rgba(0,0,0,.35)}
   #clue-img{display:none;max-height:32vh;max-width:70vw;border:5px solid var(--orange);border-radius:2vmin;background:#fff;margin:0 auto;box-shadow:0 1vmin 3vmin rgba(0,0,0,.4);flex:0 0 auto}
   #clue-img.on{display:block}
   #clue-text{order:1}
@@ -91,13 +89,10 @@
   #clue-img.after-answer{order:4}
   #clue-clip{order:5}
   @media (min-width:800px){ #clue-img.on.after-answer{max-height:42vh} }
-  #answer{font-family:var(--display);font-weight:700;color:var(--gold);font-size:clamp(26px,4.2vw,80px);min-height:1.3em;visibility:hidden;overflow-wrap:break-word;line-height:1.15}
+  #answer{font-family:var(--display);font-weight:700;color:var(--gold);font-size:clamp(22px, min(2.4vw, 3.5vh), 30px);min-height:1.3em;visibility:hidden;overflow-wrap:break-word;line-height:1.25}
   #answer.shown{visibility:visible;white-space:pre-line}
-  #answer.multi{font-size:clamp(20px,2.9vw,52px)}
   #answer.empty{color:var(--muted);font-style:italic}
-  #clue-text.trail{display:inline-block;text-align:left;margin:0 auto;font-family:ui-monospace,"Cascadia Mono","SFMono-Regular",Menlo,Consolas,monospace;font-weight:800;letter-spacing:.08em;line-height:1.45;font-size:clamp(22px,3.6vw,64px)}
-  #clue-text.trail.long-trail{font-size:clamp(20px,min(5.8vw,3.6vh),40px);line-height:1.22;letter-spacing:.05em}
-  #clue-screen.long-trail #answer.shown{font-size:clamp(16px,2.4vw,40px);line-height:1.15}
+  #clue-text.trail{display:inline-block;text-align:left;margin:0 auto;font-family:ui-monospace,"Cascadia Mono","SFMono-Regular",Menlo,Consolas,monospace;font-weight:800;letter-spacing:.05em;line-height:1.25}
   .clip-wrap{display:none;width:min(92vw,520px,calc(28vh * 16 / 9));aspect-ratio:16/9;max-height:28vh;margin:.35em auto 0;border-radius:1.2vmin;overflow:hidden;background:#000;border:3px solid var(--orange);box-shadow:0 .6vmin 2vmin rgba(0,0,0,.35);flex:0 0 auto}
   .clip-wrap.on{display:block}
   .clip-wrap iframe{width:100%;height:100%;border:0;display:block}
@@ -118,7 +113,7 @@
   #final-link{font-family:Nunito,sans-serif;font-size:.85rem;color:rgba(255,255,255,.55);text-decoration:underline;cursor:pointer;background:none;border:0}
   #final-screen,#podium-screen{text-align:center;padding:24px}
   .final-tag{display:inline-block;background:linear-gradient(#ffb347,#ff8a1f);color:#2a1300;font-family:Fredoka,sans-serif;font-weight:600;padding:6px 18px;border-radius:999px;font-size:1.1rem}
-  #final-q{font-family:Fredoka,sans-serif;font-weight:600;font-size:clamp(1.6rem,3.4vw,2.8rem);line-height:1.2;max-width:1000px;margin:22px auto;color:#fff}
+  #final-q{font-family:Fredoka,sans-serif;font-weight:600;font-size:clamp(22px, min(2.4vw, 3.5vh), 30px);line-height:1.25;max-width:1000px;margin:12px auto;color:#fff}
   #final-teams{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:20px auto}
   .fteam{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:14px 18px;min-width:220px;min-height:150px;display:flex;flex-direction:column;align-items:center;gap:10px;justify-content:center}
   .fteam .nm{font-family:Fredoka,sans-serif;font-size:1.3rem;font-weight:600;color:#fff}
@@ -233,7 +228,7 @@ const GAME = {
     { name: "DWTS", clues: [
       { value: 200,  clue: "THIS PARALYMPIC GOLD MEDALIST WON THE SEASON 35 MIRRORBALL TROPHY WITH PRO DANCER DANIELLA KARAGACH.", answer: "Ezra Frech" },
       { value: 400,  clue: "THIS OLYMPIC FIGURE SKATER AND HER PARTNER PASHA PASHKOV FINISHED SECOND IN SEASON 35.", answer: "Amber Glenn" },
-      { value: 600,  clue: "THIS HEAD JUDGE OF THE U.K.'S STRICTLY COME DANCING, AND MOTHER OF PRO MARK BALLAS, WAS THE GUEST JUDGE ON HALLOWEEN NIGHT.", answer: "Shirley Ballas" },
+      { value: 600,  clue: "THIS HEAD JUDGE OF THE U.K.'S STRICTLY COME DANCING WAS THE GUEST JUDGE ON HALLOWEEN NIGHT.", answer: "Shirley Ballas" },
       { value: 800,  clue: "ALTHOUGH CONNOR WOULD BE A BETTER BOYFRIEND, THIS IS RYLEE ARNOLD'S ACTUAL BOYFRIEND.", answer: "Walker Lyons" },
       { value: 1000, clue: "THESE TWO COUPLES EACH EARNED A PERFECT SCORE ON DISNEY NIGHT, THEN WERE ELIMINATED IN BACK-TO-BACK WEEKS.", answer: "Harry Shum Jr. and Jenna Johnson, and Jenna Dewan and Val Chmerkovskiy" }
     ]},
@@ -375,7 +370,7 @@ const GAME = {
     </div>
   </div>
   <div class="clue-actions">
-    <button class="btn-big" id="reveal-btn">Reveal question</button>
+    <button class="btn-big" id="reveal-btn">Reveal answer</button>
     <button class="btn-big secondary" id="back-btn">Back to board</button>
   </div>
   <div class="scoreboard" id="clue-scores"></div>
@@ -385,7 +380,7 @@ const GAME = {
 <script>
 (function(){
   "use strict";
-  var KEY = "jeopardy-markus-thanksgiving-v5";
+  var KEY = "jeopardy-markus-thanksgiving-v6";
   var DEFAULT_NAMES = ["Team 1","Team 2","Team 3","Team 4","Team 5","Team 6"];
   var MAXT = GAME.maxTeams || 6;
 
@@ -526,7 +521,7 @@ const GAME = {
     var cat = GAME.categories[c], clue = cat.clues[r];
     $("clue-cat").textContent = cat.name;
     $("clue-val").textContent = "$"+clue.value;
-    var ct = $("clue-text"); ct.textContent = clue.clue; ct.classList.toggle("long", clue.clue.length > 90); ct.classList.toggle("lines", clue.clue.indexOf("\n") >= 0); ct.classList.toggle("trail", !!clue.trail); var longTrail = !!clue.trail && clue.clue.split("\n").length >= 7; ct.classList.toggle("long-trail", longTrail); $("clue-screen").classList.toggle("long-trail", longTrail);
+    var ct = $("clue-text"); ct.textContent = clue.clue; ct.className = clue.trail ? "trail" : ""; $("clue-screen").classList.remove("long-trail");
     var im = $("clue-img"); if(clue.img){ im.src = clue.img; im.className = "on"; } else { im.className = ""; im.removeAttribute("src"); }
     var a = $("answer"); a.className = ""; a.textContent = "\u00a0";
     clearClip();
@@ -541,7 +536,7 @@ const GAME = {
     var clue = GAME.categories[current.c].clues[current.r];
     var a = $("answer"), has = clue.answer && String(clue.answer).trim() !== "";
     a.textContent = has ? clue.answer : "No answer added";
-    a.className = "shown" + (has ? "" : " empty") + (has && String(clue.answer).indexOf("\n") >= 0 ? " multi" : "");
+    a.className = "shown" + (has ? "" : " empty");
     if(clue.full){
       var im = $("clue-img");
       im.src = clue.full;
