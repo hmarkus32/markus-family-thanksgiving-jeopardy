@@ -223,8 +223,8 @@ const GAME = {
   title: "Jeopardy — Markus Family Thanksgiving 🦃",
   maxTeams: 6,
   final: {
-    clue: "COMING SOON.",
-    answer: "TBD"
+    clue: "NAME THE MIDDLE NAMES OF EVERY MARKUS FAMILY MEMBER, THEIR SPOUSE, AND ALL THE GRANDKIDS.",
+    answer: "Host will judge texted answers"
   },
   categories: [
     { name: "DWTS", clues: [
@@ -246,7 +246,7 @@ const GAME = {
       { value: 400,  clue: "THIS EMPLOYEE RAN HIS CAR THROUGH THE TUNNEL BACKWARDS.", answer: "Hayden Hess" },
       { value: 600,  clue: "THIS EMPLOYEE COINED THE PHRASE \"SURE CLEAN CAR WASH, HOME OF THE CAR WASH\" YEARS AFTER A FIRECRACKER EXPLODED IN HER EYE.", answer: "Cassie" },
       { value: 800,  clue: "THIS EMPLOYEE VACUUMED THE SEAT THAT HELD THE BUTT OF GEORGE W. BUSH.", answer: "Kyle Atwood" },
-      { value: 1000, clue: "THIS MANAGER WROTE A MOTIVATIONAL BOOK ABOUT NOT QUITTING.  HE QUIT AFTER 2 WEEKS.", answer: "TBD" }
+      { value: 1000, clue: "THIS EMPLOYEE WORKED AT THE CAR WASH FOR 24 HOURS, BUT QUIT BECAUSE GRANDPA YELLED AT HER.", answer: "Jill Randall" }
     ]},
     { name: "Word String", clues: [
       { value: 200,  trail: true, clue: "FIRE\nT _ _ _ _\nS _ _ _\nS _ _ _", answer: "FIRE TRUCK STOP SIGN" },
@@ -260,7 +260,7 @@ const GAME = {
       { value: 400,  clue: "NAME ALL FOUR THEME PARKS AT WALT DISNEY WORLD.", answer: "Magic Kingdom, EPCOT, Hollywood Studios, and Animal Kingdom" },
       { value: 600,  clue: "THIS IS THE YEAR THE MAGIC KINGDOM, WALT DISNEY WORLD'S FIRST THEME PARK, OPENED.", answer: "1971" },
       { value: 800,  clue: "EPCOT IS AN ACRONYM COINED BY WALT DISNEY THAT STANDS FOR THIS.", answer: "Experimental Prototype Community of Tomorrow" },
-      { value: 1000, clue: "THIS INVITATION-ONLY SUITE INSIDE CINDERELLA CASTLE HAS CLOCKS FROZEN AT 11:59 P.M.", answer: "The Cinderella Castle Suite" }
+      { value: 1000, clue: "THE RESORT MONORAIL RUNS THROUGH THIS WALT DISNEY WORLD HOTEL.", answer: "Disney's Contemporary Resort" }
     ]},
     { name: "Stand on Your Sticker", clues: [
       { value: 200,  clue: "THE NUMBER OF DANCE ROOMS AT THE STUDIO.", answer: "4" },
@@ -382,7 +382,7 @@ const GAME = {
 <script>
 (function(){
   "use strict";
-  var KEY = "jeopardy-markus-thanksgiving-v3";
+  var KEY = "jeopardy-markus-thanksgiving-v4";
   var DEFAULT_NAMES = ["Team 1","Team 2","Team 3","Team 4","Team 5","Team 6"];
   var MAXT = GAME.maxTeams || 6;
 
