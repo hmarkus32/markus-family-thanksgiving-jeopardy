@@ -96,9 +96,35 @@
   .clip-wrap{display:none;width:min(92vw,520px,calc(28vh * 16 / 9));aspect-ratio:16/9;max-height:28vh;margin:.35em auto 0;border-radius:1.2vmin;overflow:hidden;background:#000;border:3px solid var(--orange);box-shadow:0 .6vmin 2vmin rgba(0,0,0,.35);flex:0 0 auto}
   .clip-wrap.on{display:block}
   .clip-wrap iframe{width:100%;height:100%;border:0;display:block}
-  .clue-actions{display:flex;gap:2vw;justify-content:center;flex:0 0 auto}
+  .clue-actions{display:flex;flex-wrap:wrap;align-items:center;gap:2vw;justify-content:center;flex:0 0 auto}
   .clue-actions .btn-big{font-size:clamp(18px,2.2vw,36px)}
   .clue-actions .btn-big.secondary{background:rgba(255,255,255,.1);color:var(--cream);box-shadow:none;border:2px solid rgba(255,255,255,.3)}
+  @media (max-width:699px){
+    .clue-actions{display:grid;grid-template-columns:1fr 1fr;justify-items:stretch;gap:8px 2vw}
+    .clue-actions .timer-pill{grid-column:1 / -1;justify-self:center}
+  }
+  .timer-pill{position:relative;display:inline-flex;align-items:stretch;isolation:isolate;height:38px;border-radius:999px;overflow:hidden;
+    border:2px solid rgba(255,196,77,.6);background:rgba(0,0,0,.32);box-shadow:0 2px 8px rgba(0,0,0,.28);flex:0 0 auto;user-select:none;-webkit-user-select:none}
+  .timer-pill .timer-fill{position:absolute;inset:0 auto 0 0;width:var(--p,100%);background:linear-gradient(180deg,#ffc44d,#e86a12);z-index:0;display:none;pointer-events:none}
+  .timer-pill.running .timer-fill,.timer-pill.timesup .timer-fill{display:block}
+  .timer-pill .timer-half{position:relative;z-index:1;flex:1 1 0;min-width:58px;border:0;background:transparent;color:var(--cream);
+    font-family:var(--display);font-weight:600;font-size:15px;padding:0 14px;line-height:1}
+  .timer-pill .timer-half + .timer-half{box-shadow:inset 1px 0 0 rgba(255,255,255,.3)}
+  .timer-pill .timer-half:hover,.timer-pill .timer-half:focus-visible{background:rgba(255,154,60,.25);outline:none}
+  .timer-pill .timer-display{display:none;position:relative;z-index:1;min-width:128px;padding:0 22px;border:0;background:transparent;color:#fff;
+    font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:.04em;line-height:1;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+  .timer-pill.running,.timer-pill.timesup{height:48px}
+  .timer-pill.running .timer-half,.timer-pill.timesup .timer-half{display:none}
+  .timer-pill.running .timer-display,.timer-pill.timesup .timer-display{display:block}
+  .timer-pill.timesup{border-color:#ff6b6b}
+  .timer-pill.timesup .timer-fill{width:0;background:#ff4d4d}
+  #clue-screen.timesup,#final-screen.timesup{animation:screenFlash .65s ease}
+  @keyframes screenFlash{
+    0%{box-shadow:inset 0 0 0 0 rgba(255,80,80,0)}
+    18%,48%{box-shadow:inset 0 0 0 10px #ff5a5a, inset 0 0 120px 40px rgba(255,60,60,.42)}
+    100%{box-shadow:inset 0 0 0 0 rgba(255,80,80,0)}
+  }
+  #final-timer{margin:2px auto 8px}
   #clue-screen .scoreboard{padding-top:.5vh}
   .deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
   .deco span{position:absolute;font-size:clamp(22px,3.2vw,52px);opacity:.22;animation:floaty 7s ease-in-out infinite}
@@ -329,6 +355,12 @@ const GAME = {
 <div id="final-screen" class="screen">
   <span class="final-tag" id="final-tag">🏆 Final Round · Wager</span>
   <p id="final-q"></p>
+  <div class="timer-pill" id="final-timer" role="group" aria-label="Optional timer" hidden>
+    <span class="timer-fill" aria-hidden="true"></span>
+    <button type="button" class="timer-half" data-sec="30" aria-label="Start 30 second timer">30s</button>
+    <button type="button" class="timer-half" data-sec="60" aria-label="Start 1 minute timer">1:00</button>
+    <button type="button" class="timer-display" aria-label="Stop timer">0:00</button>
+  </div>
   <div id="final-answer"></div>
   <div id="final-teams"></div>
   <button class="btn-big" id="reveal-final-btn" type="button" hidden>Reveal question</button>
@@ -371,6 +403,12 @@ const GAME = {
   </div>
   <div class="clue-actions">
     <button class="btn-big" id="reveal-btn">Reveal answer</button>
+    <div class="timer-pill" id="clue-timer" role="group" aria-label="Optional timer">
+      <span class="timer-fill" aria-hidden="true"></span>
+      <button type="button" class="timer-half" data-sec="30" aria-label="Start 30 second timer">30s</button>
+      <button type="button" class="timer-half" data-sec="60" aria-label="Start 1 minute timer">1:00</button>
+      <button type="button" class="timer-display" aria-label="Stop timer">0:00</button>
+    </div>
     <button class="btn-big secondary" id="back-btn">Back to board</button>
   </div>
   <div class="scoreboard" id="clue-scores"></div>
@@ -380,7 +418,7 @@ const GAME = {
 <script>
 (function(){
   "use strict";
-  var KEY = "jeopardy-markus-thanksgiving-v6";
+  var KEY = "jeopardy-markus-thanksgiving-v7";
   var DEFAULT_NAMES = ["Team 1","Team 2","Team 3","Team 4","Team 5","Team 6"];
   var MAXT = GAME.maxTeams || 6;
 
@@ -407,6 +445,114 @@ const GAME = {
   var current = null;   // {c, r}
   var $ = function(id){ return document.getElementById(id); };
 
+  var timer = { end:0, total:0, raf:0, to:0, audio:null };
+  function timerPills(){ return document.querySelectorAll(".timer-pill"); }
+  function fmtTimer(ms){
+    var s = Math.max(0, Math.ceil(ms/1000));
+    return Math.floor(s/60) + ":" + (s%60<10?"0":"") + (s%60);
+  }
+  function unlockTimerAudio(){
+    try{
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return;
+      if(!timer.audio) timer.audio = new AC();
+      if(timer.audio.state === "suspended") timer.audio.resume();
+    }catch(e){}
+  }
+  function playTimesUp(){
+    try{
+      unlockTimerAudio();
+      var ctx = timer.audio;
+      if(!ctx) return;
+      var now = ctx.currentTime;
+      function beep(start, freq, dur, vol){
+        var o = ctx.createOscillator();
+        var g = ctx.createGain();
+        o.type = "square";
+        o.frequency.setValueAtTime(freq, start);
+        g.gain.setValueAtTime(0.0001, start);
+        g.gain.exponentialRampToValueAtTime(vol, start + 0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(start); o.stop(start + dur + 0.02);
+      }
+      beep(now, 880, 0.16, 0.11);
+      beep(now + 0.18, 660, 0.16, 0.11);
+      beep(now + 0.36, 392, 0.34, 0.14);
+    }catch(e){}
+  }
+  function stopTimer(){
+    if(timer.raf) cancelAnimationFrame(timer.raf);
+    if(timer.to) clearTimeout(timer.to);
+    timer.raf = timer.to = timer.end = timer.total = 0;
+    timerPills().forEach(function(p){
+      p.classList.remove("running","timesup");
+      p.style.removeProperty("--p");
+      var d = p.querySelector(".timer-display");
+      if(d) d.textContent = "0:00";
+    });
+    var cs = $("clue-screen"), fs = $("final-screen");
+    if(cs) cs.classList.remove("timesup");
+    if(fs) fs.classList.remove("timesup");
+  }
+  function paintTimer(ms, frac){
+    var label = fmtTimer(ms);
+    timerPills().forEach(function(p){
+      if(p.hidden) return;
+      p.classList.add("running");
+      p.classList.remove("timesup");
+      p.style.setProperty("--p", (Math.max(0, frac)*100) + "%");
+      var d = p.querySelector(".timer-display");
+      if(d){ d.textContent = label; d.setAttribute("aria-label", "Stop timer, "+label+" left"); }
+    });
+  }
+  function onTimesUp(){
+    if(timer.raf) cancelAnimationFrame(timer.raf);
+    timer.raf = timer.end = timer.total = 0;
+    timerPills().forEach(function(p){
+      if(p.hidden) return;
+      p.classList.remove("running");
+      p.classList.add("timesup");
+      p.style.setProperty("--p", "0%");
+      var d = p.querySelector(".timer-display");
+      if(d){ d.textContent = "0:00"; d.setAttribute("aria-label", "Time is up, tap to reset"); }
+    });
+    var cs = $("clue-screen"), fs = $("final-screen");
+    if(cs && cs.classList.contains("active")) cs.classList.add("timesup");
+    if(fs && fs.classList.contains("active")) fs.classList.add("timesup");
+    playTimesUp();
+    timer.to = setTimeout(function(){ stopTimer(); }, 1400);
+  }
+  function startTimer(sec){
+    stopTimer();
+    unlockTimerAudio();
+    var ms = Math.max(1, Number(sec)||0) * 1000;
+    timer.total = ms;
+    timer.end = Date.now() + ms;
+    paintTimer(ms, 1);
+    function frame(){
+      var left = timer.end - Date.now();
+      if(left <= 0){ onTimesUp(); return; }
+      paintTimer(left, left / timer.total);
+      timer.raf = requestAnimationFrame(frame);
+    }
+    timer.raf = requestAnimationFrame(frame);
+  }
+  function wireTimer(pill){
+    if(!pill) return;
+    pill.querySelectorAll(".timer-half").forEach(function(btn){
+      btn.addEventListener("click", function(e){
+        e.preventDefault(); e.stopPropagation();
+        startTimer(Number(btn.getAttribute("data-sec")));
+      });
+    });
+    var disp = pill.querySelector(".timer-display");
+    if(disp) disp.addEventListener("click", function(e){
+      e.preventDefault(); e.stopPropagation();
+      stopTimer();
+    });
+  }
+
   function clipEmbedUrl(url, start, end){
     var m = String(url||"").match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{6,})/);
     if(!m) return "";
@@ -423,6 +569,7 @@ const GAME = {
   function show(id){
     if(id !== "clue-screen") clearClip();
     if(id !== "intro-screen") stopIntroFx();
+    if(id !== "clue-screen" && id !== "final-screen") stopTimer();
     ["title","setup-screen","intro-screen","board-screen","clue-screen","final-screen","reveal-screen","podium-screen"].forEach(function(s){ $(s).classList.toggle("active", s===id); });
   }
   function fmt(n){ return (n<0?"-":"") + "$" + Math.abs(n).toLocaleString("en-US"); }
@@ -517,6 +664,7 @@ const GAME = {
 
   /* ---- Clue view ---- */
   function openClue(c,r){
+    stopTimer();
     current = {c:c, r:r, revealed:false};
     var cat = GAME.categories[c], clue = cat.clues[r];
     $("clue-cat").textContent = cat.name;
@@ -603,6 +751,8 @@ const GAME = {
     var allJ = allJudged();
     var qShown = !!state.final.questionShown;
     $("final-q").textContent = qShown ? (fin.clue || "") : "Final Jeopardy";
+    $("final-timer").hidden = !qShown;
+    if(!qShown) stopTimer();
     var ans = $("final-answer");
     ans.textContent = "";
     ans.classList.remove("shown");
@@ -921,6 +1071,8 @@ const GAME = {
     advanceIntro();
   });
   $("title-btn").addEventListener("click", function(){ show("title"); $("start-btn").focus(); });
+  wireTimer($("clue-timer"));
+  wireTimer($("final-timer"));
   $("reveal-btn").addEventListener("click", reveal);
   $("back-btn").addEventListener("click", backToBoard);
   $("reset-btn").addEventListener("click", function(){
