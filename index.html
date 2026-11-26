@@ -124,9 +124,12 @@
   .fteam .nm{font-family:Fredoka,sans-serif;font-size:1.3rem;font-weight:600;color:#fff}
   .fteam label{font-family:Nunito,sans-serif;font-size:.85rem;color:rgba(255,255,255,.7)}
   .fteam input{width:140px;font-family:Fredoka,sans-serif;font-size:1.4rem;text-align:center;border-radius:12px;border:2px solid #ffb347;background:#2a100c;color:#ffd166;padding:6px}
-  .fteam .row{display:flex;gap:10px}
-  .fteam .ok,.fteam .no{width:60px;height:48px;border-radius:999px;border:0;font-size:1.5rem;cursor:pointer;color:#fff}
-  .fteam .ok{background:#2ea05a}.fteam .no{background:#c9435e}
+  .fteam input.wager{-webkit-text-security:disc;text-security:disc;letter-spacing:.2em}
+  .fteam .row{display:flex;gap:8px}
+  .fteam .ok,.fteam .no{width:34px;height:26px;border-radius:8px;border:1px solid rgba(255,255,255,.22);
+    background:rgba(255,255,255,.06);color:rgba(255,255,255,.45);font-size:.8rem;cursor:pointer;line-height:1}
+  .fteam .ok:hover,.fteam .no:hover{color:#fff;border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.12)}
+  .fteam .marked{font-family:Nunito,sans-serif;font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.04em}
   .fteam .lock{font-size:2.2rem;line-height:1}
   .fteam .hidden-wager{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,3.4vw,2.6rem);color:var(--gold);letter-spacing:.16em}
   .fteam .lock-row{display:flex;align-items:center;gap:10px}
@@ -333,7 +336,7 @@ const GAME = {
   <p id="final-q"></p>
   <div id="final-answer"></div>
   <div id="final-teams"></div>
-  <button class="btn-big" id="reveal-final-btn" type="button" hidden>Reveal answer</button>
+  <button class="btn-big" id="reveal-final-btn" type="button" hidden>Reveal question</button>
   <button class="btn-big" id="results-btn" type="button" hidden>Reveal scores 🎉</button>
   <div style="margin-top:14px"><button class="btn-small" id="final-back" type="button">Back to board</button></div>
 </div>
@@ -372,7 +375,7 @@ const GAME = {
     </div>
   </div>
   <div class="clue-actions">
-    <button class="btn-big" id="reveal-btn">Reveal answer</button>
+    <button class="btn-big" id="reveal-btn">Reveal question</button>
     <button class="btn-big secondary" id="back-btn">Back to board</button>
   </div>
   <div class="scoreboard" id="clue-scores"></div>
@@ -382,12 +385,12 @@ const GAME = {
 <script>
 (function(){
   "use strict";
-  var KEY = "jeopardy-markus-thanksgiving-v4";
+  var KEY = "jeopardy-markus-thanksgiving-v5";
   var DEFAULT_NAMES = ["Team 1","Team 2","Team 3","Team 4","Team 5","Team 6"];
   var MAXT = GAME.maxTeams || 6;
 
   function defaultState(){
-    return { played:{}, final:{wager:{},locked:{},judged:{},answerShown:false}, teams: DEFAULT_NAMES.slice(0,2).map(function(n){return {name:n, score:0};}) };
+    return { played:{}, final:{wager:{},locked:{},judged:{},questionShown:false}, teams: DEFAULT_NAMES.slice(0,2).map(function(n){return {name:n, score:0};}) };
   }
   function load(){
     try{
@@ -399,7 +402,7 @@ const GAME = {
         return { name: (t && typeof t.name==="string") ? t.name : DEFAULT_NAMES[i], score: Number(t && t.score)||0 };
       });
       if(!s.final || typeof s.final!=="object") s.final = {};
-      s.final.wager = s.final.wager || {}; s.final.locked = s.final.locked || {}; s.final.judged = s.final.judged || {}; s.final.answerShown = !!s.final.answerShown;
+      s.final.wager = s.final.wager || {}; s.final.locked = s.final.locked || {}; s.final.judged = s.final.judged || {}; s.final.questionShown = !!s.final.questionShown;
       return s;
     }catch(e){ return defaultState(); }
   }
@@ -591,7 +594,7 @@ const GAME = {
     save(); renderFinal();
   }
   function judgeTeam(i, sign){
-    if(!state.final.answerShown) return;
+    if(!state.final.questionShown) return;
     if(state.final.judged[i]===1 || state.final.judged[i]===-1) return;
     var w = clampWager(i, state.final.wager[i]||0);
     state.final.wager[i] = w;
@@ -601,35 +604,42 @@ const GAME = {
   }
   function renderFinal(){
     var fin = GAME.final || {};
-    $("final-q").textContent = fin.clue || "";
-    var ans = $("final-answer");
-    ans.textContent = fin.answer || "";
-    ans.classList.toggle("shown", !!state.final.answerShown);
     var allW = allWagersLocked();
     var allJ = allJudged();
-    $("final-tag").textContent = !allW ? "🏆 Final Round · Wager" : (state.final.answerShown ? "🏆 Final Round · Grade" : "🏆 Final Round");
+    var qShown = !!state.final.questionShown;
+    $("final-q").textContent = qShown ? (fin.clue || "") : "Final Jeopardy";
+    var ans = $("final-answer");
+    ans.textContent = "";
+    ans.classList.remove("shown");
+    $("final-tag").textContent = !allW ? "🏆 Final Jeopardy · Wager" : (qShown ? "🏆 Final Jeopardy" : "🏆 Final Jeopardy · Wager");
     var box = $("final-teams"); box.innerHTML = "";
     state.teams.forEach(function(tm,i){
       var d = document.createElement("div"); d.className = "fteam"; d.dataset.i = i;
       var nm = document.createElement("div"); nm.className = "nm"; nm.textContent = tm.name; d.appendChild(nm);
       if(state.final.locked[i]){
         d.appendChild(hiddenWagerEl(tm.name));
-        if(state.final.answerShown && !(state.final.judged[i]===1 || state.final.judged[i]===-1)){
+        if(qShown && !(state.final.judged[i]===1 || state.final.judged[i]===-1)){
           var row = document.createElement("div"); row.className = "row";
-          var ok = document.createElement("button"); ok.type="button"; ok.className="ok"; ok.textContent="✓"; ok.setAttribute("aria-label", tm.name+" correct");
-          var no = document.createElement("button"); no.type="button"; no.className="no"; no.textContent="✗"; no.setAttribute("aria-label", tm.name+" wrong");
+          var ok = document.createElement("button"); ok.type="button"; ok.className="ok"; ok.textContent="✓"; ok.setAttribute("aria-label", "Host mark "+tm.name+" right");
+          var no = document.createElement("button"); no.type="button"; no.className="no"; no.textContent="✗"; no.setAttribute("aria-label", "Host mark "+tm.name+" wrong");
           ok.addEventListener("click", function(){ judgeTeam(i, 1); });
           no.addEventListener("click", function(){ judgeTeam(i, -1); });
           row.appendChild(ok); row.appendChild(no); d.appendChild(row);
+        } else if(qShown && (state.final.judged[i]===1 || state.final.judged[i]===-1)){
+          var done = document.createElement("div"); done.className = "marked"; done.textContent = "Marked"; d.appendChild(done);
         }
       } else {
-        var lb = document.createElement("label"); lb.textContent = "Wager (0 – "+fmt(maxWager(i))+")";
-        var inp = document.createElement("input"); inp.type = "number"; inp.min = 0; inp.max = maxWager(i); inp.step = 100; inp.className = "wager";
+        var lb = document.createElement("label"); lb.textContent = "Enter wager (0 – "+fmt(maxWager(i))+")";
+        var inp = document.createElement("input"); inp.type = "text"; inp.inputMode = "numeric"; inp.pattern = "[0-9]*"; inp.className = "wager"; inp.autocomplete = "off";
         inp.value = state.final.wager[i] != null && state.final.wager[i] !== "" ? String(clampWager(i, state.final.wager[i])) : "";
         inp.disabled = maxWager(i)===0;
         if(maxWager(i)===0) inp.value = "0";
         inp.setAttribute("aria-label", tm.name+" wager");
-        inp.addEventListener("input", function(){ state.final.wager[i] = clampWager(i, inp.value); save(); });
+        inp.addEventListener("input", function(){
+          inp.value = String(inp.value||"").replace(/\D/g,"");
+          state.final.wager[i] = clampWager(i, inp.value);
+          save();
+        });
         inp.addEventListener("keydown", function(e){
           if(e.key==="Enter"){ e.preventDefault(); e.stopPropagation(); lockWager(i, inp.value); }
         });
@@ -640,12 +650,12 @@ const GAME = {
       }
       box.appendChild(d);
     });
-    $("reveal-final-btn").hidden = !(allW && !state.final.answerShown);
+    $("reveal-final-btn").hidden = !(allW && !qShown);
     $("results-btn").hidden = !allJ;
   }
-  function revealFinalAnswer(){
+  function revealQuestion(){
     if(!allWagersLocked()) return;
-    state.final.answerShown = true;
+    state.final.questionShown = true;
     save(); renderFinal();
   }
   function openFinal(){ current = null; renderFinal(); show("final-screen"); }
@@ -743,7 +753,7 @@ const GAME = {
   /* ---- Wiring ---- */
   $("final-btn").addEventListener("click", openFinal);
   $("final-link").addEventListener("click", openFinal);
-  $("reveal-final-btn").addEventListener("click", revealFinalAnswer);
+  $("reveal-final-btn").addEventListener("click", revealQuestion);
   $("results-btn").addEventListener("click", startReveal);
   $("reveal-screen").addEventListener("click", advanceReveal);
   $("final-back").addEventListener("click", function(){ renderBoard(); renderBoardScores(); show("board-screen"); });
